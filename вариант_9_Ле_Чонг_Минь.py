@@ -17,8 +17,8 @@ plt.plot(x, y)
 
 plt.savefig("img_1.png")
 
-img1 = Image.open("img_1.png").save("img_result.bmp")
-# img1 = img1.convert("1")
-# img1 = img1.save("img_result.bmp")
+img1 = Image.open("img_1.png")
+img1 = img1.convert("L")
+img1 = img1.save("img_result.bmp")
 
 plt.show()
