@@ -72,9 +72,9 @@ def main():
             b.setPixel(i, j, (255, 255, 255))
 
 
-    offset2 = -2.75
+    offset2 = 0
     for y_locate in range(side):
-        offset1 = -2.75
+        offset1 = 0
         for x_locate in range(side):
             if (offset1, offset2) in all_pixels:
                 b.setPixel(x_locate, y_locate, (0, 0, 0))
