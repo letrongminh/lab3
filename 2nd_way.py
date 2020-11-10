@@ -1,6 +1,5 @@
 from math import cos, sin, pi
 
-
 from struct import pack
 
 
@@ -50,40 +49,40 @@ class Bitmap():
             for i in range((4 - ((s._bcWidth * 3) % 4)) % 4):
                 f.write(pack('B', 0))
 
+
 t = 0
 all_pixels = []
 pixel = []
+step = 0.04
 while t <= 4 * pi:
-    x = round(13*(cos(t) - cos(6.5*t)/6.5), 2)
-    y = round(13*(sin(t) - sin(6.5*t)/6.5), 2)
+    x = round(13 * (cos(t) - cos(6.5 * t) / 6.5), 2)
+    y = round(13 * (sin(t) - sin(6.5 * t) / 6.5), 2)
     pixel.append(x)
     pixel.append(y)
     all_pixels.append(tuple(pixel))
     pixel.clear()
-    t += 0.01
+    t += 0.001
 
 
 def main():
-
-    side = 600
+    side = 800
     b = Bitmap(side, side)
     for i in range(0, side):
         for j in range(0, side):
             b.setPixel(i, j, (255, 255, 255))
 
-
-    offset2 = 0
+    offset2 = -15.5
     for y_locate in range(side):
-        offset1 = 0
+        offset1 = -15.5
         for x_locate in range(side):
             if (offset1, offset2) in all_pixels:
                 b.setPixel(x_locate, y_locate, (0, 0, 0))
             else:
                 b.setPixel(x_locate, y_locate, (255, 255, 255))
-            offset1 = round(offset1 + 0.01, 2)
-        offset2 = round(offset2 + 0.01, 2)
+            offset1 = round(offset1 + step, 3)
+        offset2 = round(offset2 + step, 3)
 
-    b.write('file.bmp')
+    b.write('2nd_result.bmp')
 
 
 if __name__ == '__main__':
