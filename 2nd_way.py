@@ -5,22 +5,22 @@ from struct import pack
 
 class Bitmap:
     def __init__(self, width, height):
-        self.Type = 19778  # Bitmap signature
-        self.Reserved1 = 0
-        self.Reserved2 = 0
-        self.Planes = 1
-        self.cSize = 12
-        self.Bit_Count = 24
-        self.Off_Bits = 26
+        self.type = 19778  # Bitmap signature
+        self.reserved1 = 0
+        self.reserved2 = 0
+        self.planes = 1
+        self.c_size = 12
+        self.bit_count = 24
+        self.off_bits = 26
         self.Width = width
         self.Height = height
-        self.fSize = 26 + self.Width * 3 * self.Height
+        self.f_size = 26 + self.Width * 3 * self.Height
         self.clear()
 
     def clear(self):
         self.graphics = [(0, 0, 0)] * self.Width * self.Height
 
-    def set_Pixel(self, x, y, color):
+    def set_pixel(self, x, y, color):
         if isinstance(color, tuple):
             if x < 0 or y < 0 or x > self.Width - 1 or y > self.Height - 1:
                 raise ValueError('Coords out of range')
@@ -33,17 +33,17 @@ class Bitmap:
     def write(self, file):
         with open(file, 'wb') as f:
             f.write(pack('<HLHHL',
-                         self.Type,
-                         self.fSize,
-                         self.Reserved1,
-                         self.Reserved2,
-                         self.Off_Bits))  # Writing BITMAP FILE HEADER
+                         self.type,
+                         self.f_size,
+                         self.reserved1,
+                         self.reserved2,
+                         self.off_bits))  # Writing BITMAP FILE HEADER
             f.write(pack('<LHHHH',
-                         self.cSize,
+                         self.c_size,
                          self.Width,
                          self.Height,
-                         self.Planes,
-                         self.Bit_Count))  # Writing BITMAP INFO
+                         self.planes,
+                         self.bit_count))  # Writing BITMAP INFO
             for px in self.graphics:
                 f.write(pack('<BBB', *px))
             for i in range((4 - ((self.Width * 3) % 4)) % 4):
@@ -69,16 +69,16 @@ def main():
     b = Bitmap(side, side)
     for i in range(0, side):
         for j in range(0, side):
-            b.set_Pixel(i, j, (255, 255, 255))
+            b.set_pixel(i, j, (255, 255, 255))
 
     offset2 = -15.5
     for y_locate in range(side):
         offset1 = -15.5
         for x_locate in range(side):
             if (offset1, offset2) in all_pixels:
-                b.set_Pixel(x_locate, y_locate, (0, 0, 0))
+                b.set_pixel(x_locate, y_locate, (0, 0, 0))
             else:
-                b.set_Pixel(x_locate, y_locate, (255, 255, 255))
+                b.set_pixel(x_locate, y_locate, (255, 255, 255))
             offset1 = round(offset1 + step, 3)
         offset2 = round(offset2 + step, 3)
 
