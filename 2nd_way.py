@@ -3,50 +3,50 @@ from math import cos, sin, pi
 from struct import pack
 
 
-class Bitmap():
-    def __init__(s, width, height):
-        s._bfType = 19778  # Bitmap signature
-        s._bfReserved1 = 0
-        s._bfReserved2 = 0
-        s._bcPlanes = 1
-        s._bcSize = 12
-        s._bcBitCount = 24
-        s._bfOffBits = 26
-        s._bcWidth = width
-        s._bcHeight = height
-        s._bfSize = 26 + s._bcWidth * 3 * s._bcHeight
-        s.clear()
+class Bitmap:
+    def __init__(self, width, height):
+        self.Type = 19778  # Bitmap signature
+        self.Reserved1 = 0
+        self.Reserved2 = 0
+        self.Planes = 1
+        self.cSize = 12
+        self.Bit_Count = 24
+        self.Off_Bits = 26
+        self.Width = width
+        self.Height = height
+        self.fSize = 26 + self.Width * 3 * self.Height
+        self.clear()
 
-    def clear(s):
-        s._graphics = [(0, 0, 0)] * s._bcWidth * s._bcHeight
+    def clear(self):
+        self.graphics = [(0, 0, 0)] * self.Width * self.Height
 
-    def setPixel(s, x, y, color):
+    def set_Pixel(self, x, y, color):
         if isinstance(color, tuple):
-            if x < 0 or y < 0 or x > s._bcWidth - 1 or y > s._bcHeight - 1:
+            if x < 0 or y < 0 or x > self.Width - 1 or y > self.Height - 1:
                 raise ValueError('Coords out of range')
             if len(color) != 3:
-                raise ValueError('Color must be a tuple of 3 elems')
-            s._graphics[y * s._bcWidth + x] = (color[2], color[1], color[0])
+                raise ValueError('Color must be a tuple of 3 elements')
+            self.graphics[y * self.Width + x] = (color[2], color[1], color[0])
         else:
-            raise ValueError('Color must be a tuple of 3 elems')
+            raise ValueError('Color must be a tuple of 3 elements')
 
-    def write(s, file):
+    def write(self, file):
         with open(file, 'wb') as f:
             f.write(pack('<HLHHL',
-                         s._bfType,
-                         s._bfSize,
-                         s._bfReserved1,
-                         s._bfReserved2,
-                         s._bfOffBits))  # Writing BITMAPFILEHEADER
+                         self.Type,
+                         self.fSize,
+                         self.Reserved1,
+                         self.Reserved2,
+                         self.Off_Bits))  # Writing BITMAP FILE HEADER
             f.write(pack('<LHHHH',
-                         s._bcSize,
-                         s._bcWidth,
-                         s._bcHeight,
-                         s._bcPlanes,
-                         s._bcBitCount))  # Writing BITMAPINFO
-            for px in s._graphics:
+                         self.cSize,
+                         self.Width,
+                         self.Height,
+                         self.Planes,
+                         self.Bit_Count))  # Writing BITMAP INFO
+            for px in self.graphics:
                 f.write(pack('<BBB', *px))
-            for i in range((4 - ((s._bcWidth * 3) % 4)) % 4):
+            for i in range((4 - ((self.Width * 3) % 4)) % 4):
                 f.write(pack('B', 0))
 
 
@@ -69,16 +69,16 @@ def main():
     b = Bitmap(side, side)
     for i in range(0, side):
         for j in range(0, side):
-            b.setPixel(i, j, (255, 255, 255))
+            b.set_Pixel(i, j, (255, 255, 255))
 
     offset2 = -15.5
     for y_locate in range(side):
         offset1 = -15.5
         for x_locate in range(side):
             if (offset1, offset2) in all_pixels:
-                b.setPixel(x_locate, y_locate, (0, 0, 0))
+                b.set_Pixel(x_locate, y_locate, (0, 0, 0))
             else:
-                b.setPixel(x_locate, y_locate, (255, 255, 255))
+                b.set_Pixel(x_locate, y_locate, (255, 255, 255))
             offset1 = round(offset1 + step, 3)
         offset2 = round(offset2 + step, 3)
 
